@@ -122,24 +122,11 @@ def photometry(filters_path, filters_list, specs_path, specs_list, telescope_are
         photometry_flam   = np.array(photometry_flam)        # in flux of lambda
         photometry_fnu    = 10**(-0.4*(photometry + 48.60))  # in flux of nu
 
-        print photometry
-
-        if plot==False:
-            return filter_name, photometry, lambda_eff, photometry_flam, photometry_fnu
-        else:
-
-        # plots --------------------------------------------------------------------------------------------------------
-            plot01 = plt.plot(spectrum2.wave, spectrum2.flux, '-')
-            plot02 = plt.plot(lambda_eff[[photometry_flam!=-999]], photometry_flam[[photometry_flam!=-999]], 'o')
-            plt.title(r"%s" % each_spectrum, size='15')
-            plt.savefig(os.path.join(results_path, str(count)+'.png'), dpi = 100)
-            plt.show()
-
-        if save==False:
+        if (plot==False)*(save==False):
             continue
-        else:
 
-        # saving the newley calculated photometry ----------------------------------------------------------------------
+        elif (plot==False)*(save==True):
+            # saving the newley calculated photometry ------------------------------------------------------------------
             galaxy_simulation_abmag = np.vstack((filter_name, photometry))
             galaxy_simulation_abmag = pd.DataFrame(galaxy_simulation_abmag)
             galaxy_simulation_abmag.to_csv(os.path.join(results_path, str(count)+'_abmag.csv'), sep=',', header=None,
@@ -148,5 +135,32 @@ def photometry(filters_path, filters_list, specs_path, specs_list, telescope_are
             galaxy_simulation_fnu = pd.DataFrame(galaxy_simulation_fnu)
             galaxy_simulation_fnu.to_csv(os.path.join(results_path, str(count)+'_fnu.csv'), sep=',', header=None,
                                          index=False)
+
+        elif (plot==True) * (save==False):
+            # plots ----------------------------------------------------------------------------------------------------
+            plt.plot(spectrum2.wave, spectrum2.flux, '-')
+            plt.plot(lambda_eff[[photometry_flam!=-999]], photometry_flam[[photometry_flam!=-999]], 'o')
+            plt.title(r"%s" % each_spectrum, size='15')
+            plt.savefig(os.path.join(results_path, 'object_'+str(count)+'.png'), dpi = 100)
+            plt.show()
+
+        elif (plot==True) * (save==True):
+            # plots ----------------------------------------------------------------------------------------------------
+            plt.plot(spectrum2.wave, spectrum2.flux, '-')
+            plt.plot(lambda_eff[[photometry_flam!=-999]], photometry_flam[[photometry_flam!=-999]], 'o')
+            plt.title(r"%s" % each_spectrum, size='15')
+            plt.savefig(os.path.join(results_path, 'object_'+str(count)+'.png'), dpi = 100)
+            plt.show()
+
+            # saving the newley calculated photometry ------------------------------------------------------------------
+            galaxy_simulation_abmag = np.vstack((filter_name, photometry))
+            galaxy_simulation_abmag = pd.DataFrame(galaxy_simulation_abmag)
+            galaxy_simulation_abmag.to_csv(os.path.join(results_path, 'object_'+str(count)+'_abmag.csv'), sep=',',
+                                           header=None, index=False)
+            galaxy_simulation_fnu = np.vstack((filter_name, photometry_fnu))
+            galaxy_simulation_fnu = pd.DataFrame(galaxy_simulation_fnu)
+            galaxy_simulation_fnu.to_csv(os.path.join(results_path, 'object_'+str(count)+'_fnu.csv'), sep=',',
+                                         header=None, index=False)
+
     return photometry, lambda_eff, photometry_flam, photometry_fnu, filter_name
 
