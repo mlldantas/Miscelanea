@@ -6,7 +6,9 @@ import numpy             as np
 import pandas            as pd
 import matplotlib.pyplot as plt
 import matplotlib.image  as mpimg
+import datetime          as dt
 import os
+
 """
 Author: Maria Luiza Linhares Dantas
 Version: 1.0
@@ -61,6 +63,9 @@ print("----------------------------------")
 
 out_path = str(input("Where would you like to save it? \n "))
 
+today = dt.datetime.now().strftime("%d.%m.%Y")
+now   = dt.datetime.now().strftime("%Hh%Mm%Ss")
+
 output_df = pd.DataFrame(output.reshape(objects.size, 2))
 output_df.columns = ['image', 'classification']
-output_df.to_csv(os.path.join(out_path, 'output.csv'), index=False, header=True)
+output_df.to_csv(os.path.join(out_path, 'output_%s_%s.csv' % (today, now)), index=False, header=True)
