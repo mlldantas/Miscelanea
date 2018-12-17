@@ -11,7 +11,7 @@ import os
 
 """
 Author: Maria Luiza Linhares Dantas
-Version: 1.0
+Version: 1.2
 Galaxy Classification
 All parameters interact with the user.
 For doubts e-mail: mlldantas@pm.me
@@ -32,6 +32,7 @@ output = []
 for i in range(objects.size):
     img=mpimg.imread(os.path.join(figs_path, objects[i]))
     imgplot = plt.imshow(img)
+    plt.axis('off')
     plt.show()
     answer = int(input('Lenticular? \n If yes: 1 \n If no: 0 \n '))
     if answer==0 or answer==1:
